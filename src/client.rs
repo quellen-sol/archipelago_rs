@@ -18,8 +18,8 @@ pub enum ArchipelagoError {
     },
     #[error("connection closed by server")]
     ConnectionClosed,
-    #[error("data failed to serialize")]
-    FailedSerialize(#[from] serde_json::Error),
+    #[error("data failed to deserialize")]
+    FailedDeserialize(#[from] serde_json::Error),
     #[error("unexpected non-text result from websocket")]
     NonTextWebsocketResult(Message),
     #[error("network error")]

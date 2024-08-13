@@ -38,7 +38,7 @@ pub enum ServerMessage {
     SetReply(SetReply),
 }
 
-#[derive(Debug, Serialize_repr, Deserialize_repr)]
+#[derive(Clone, Debug, Serialize_repr, Deserialize_repr)]
 #[repr(u16)]
 pub enum Permission {
     Disabled = 0,
@@ -48,7 +48,7 @@ pub enum Permission {
     AutoEnabled = 7,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct NetworkVersion {
     pub major: i32,
     pub minor: i32,
@@ -186,16 +186,23 @@ pub struct SetNotify {
 
 // RESPONSES
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct PermissionsMap {
+    pub release: Permission,
+    pub collect: Permission,
+    pub remaining: Permission,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RoomInfo {
     pub version: NetworkVersion,
     pub generator_version: NetworkVersion,
     pub tags: Vec<String>,
     pub password: bool,
-    pub permissions: HashMap<String, Permission>,
+    pub permissions: PermissionsMap,
     pub hint_cost: i32,
     pub location_check_points: i32,
-    pub games: Vec<String>,
+    pub games: Option<Vec<String>>,
     pub datapackage_checksums: HashMap<String, String>,
     pub seed_name: String,
     pub time: f32,
@@ -290,10 +297,10 @@ pub struct GameData {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Bounced {
-    pub games: Vec<String>,
-    pub slots: Vec<i32>,
-    pub tags: Vec<String>,
-    pub data: Value,
+    pub games: Option<Vec<String>>,
+    pub slots: Option<Vec<i32>>,
+    pub tags: Option<Vec<String>>,
+    pub data: Bounce,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
