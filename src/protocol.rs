@@ -141,6 +141,18 @@ pub enum ClientStatus {
     ClientGoal = 30,
 }
 
+impl From<u16> for ClientStatus {
+    fn from(value: u16) -> Self {
+        match value {
+            0 => ClientStatus::ClientUnknown,
+            10 => ClientStatus::ClientReady,
+            20 => ClientStatus::ClientPlaying,
+            30 => ClientStatus::ClientGoal,
+            _ => panic!("Bad value provided for ClientStatus ({value})"),
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Say {
     pub text: String,
@@ -312,7 +324,7 @@ pub struct InvalidPacket {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Retrieved {
-    keys: Value,
+    pub keys: HashMap<String, Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
