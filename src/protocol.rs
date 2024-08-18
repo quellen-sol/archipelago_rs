@@ -4,6 +4,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
+use crate::utils::is_important;
+
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "cmd")]
 pub enum ClientMessage {
@@ -295,7 +297,7 @@ impl From<PrintJSON> for HintData {
         let item = value
             .item
             .expect("`item` field is required, but missing from PrintJSON packet");
-        let is_important = item.flags & 0b11 > 0;
+        let is_important = is_important(item.flags);
 
         Self {
             receiving: value
@@ -334,7 +336,7 @@ impl From<Hint> for HintData {
             receiving: value.receiving_player,
             item,
             found: value.found,
-            is_important: value.item_flags & 0b11 > 0,
+            is_important: is_important(value.item_flags),
         }
     }
 }
