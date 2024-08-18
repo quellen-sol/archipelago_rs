@@ -284,9 +284,9 @@ pub struct PrintJSON {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Hint {
-    receiving: i32,
-    item: NetworkItem,
-    found: bool,
+    pub receiving: i32,
+    pub item: NetworkItem,
+    pub found: bool,
 }
 
 impl From<PrintJSON> for Hint {
