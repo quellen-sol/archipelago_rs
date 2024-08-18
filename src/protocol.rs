@@ -283,6 +283,29 @@ pub struct PrintJSON {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct Hint {
+    receiving: i32,
+    item: NetworkItem,
+    found: bool,
+}
+
+impl From<PrintJSON> for Hint {
+    fn from(value: PrintJSON) -> Self {
+        Self {
+            receiving: value
+                .receiving
+                .expect("`receiving` field is required, but missing from PrintJSON packet"),
+            item: value
+                .item
+                .expect("`item` field is required, but missing from PrintJSON packet"),
+            found: value
+                .found
+                .expect("`found` field is required, but missing from PrintJSON packet"),
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct JSONMessagePart {
     pub r#type: Option<String>,
     pub text: Option<String>,
