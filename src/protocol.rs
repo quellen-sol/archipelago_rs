@@ -64,7 +64,7 @@ pub struct NetworkPlayer {
     pub name: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct NetworkItem {
     pub item: i32,
     pub location: i32,
@@ -282,25 +282,59 @@ pub struct PrintJSON {
     pub countdown: Option<i32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Hint {
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct HintData {
     pub receiving: i32,
     pub item: NetworkItem,
     pub found: bool,
+    pub is_important: bool,
 }
 
-impl From<PrintJSON> for Hint {
+impl From<PrintJSON> for HintData {
     fn from(value: PrintJSON) -> Self {
+        let item = value
+            .item
+            .expect("`item` field is required, but missing from PrintJSON packet");
+        let is_important = item.flags & 0b11 > 0;
+
         Self {
             receiving: value
                 .receiving
                 .expect("`receiving` field is required, but missing from PrintJSON packet"),
-            item: value
-                .item
-                .expect("`item` field is required, but missing from PrintJSON packet"),
+            item,
             found: value
                 .found
                 .expect("`found` field is required, but missing from PrintJSON packet"),
+            is_important,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+pub struct Hint {
+    receiving_player: i32,
+    finding_player: i32,
+    location: i32,
+    item: i32,
+    found: bool,
+    entrance: String,
+    item_flags: i32,
+}
+
+impl From<Hint> for HintData {
+    fn from(value: Hint) -> Self {
+        let item = NetworkItem {
+            item: value.item,
+            location: value.location,
+            player: value.finding_player,
+            flags: value.item_flags,
+        };
+
+        Self {
+            receiving: value.receiving_player,
+            item,
+            found: value.found,
+            is_important: value.item_flags & 0b11 > 0,
         }
     }
 }
