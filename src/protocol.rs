@@ -93,8 +93,8 @@ pub struct NetworkSlot {
 pub fn network_version() -> NetworkVersion {
     NetworkVersion {
         major: 0,
-        minor: 3,
-        build: 7,
+        minor: 5,
+        build: 0,
         class: "Version".to_string(),
     }
 }
@@ -138,6 +138,7 @@ pub struct StatusUpdate {
 #[repr(u16)]
 pub enum ClientStatus {
     ClientUnknown = 0,
+    ClientConnected = 5,
     ClientReady = 10,
     ClientPlaying = 20,
     ClientGoal = 30,
@@ -147,6 +148,7 @@ impl From<u16> for ClientStatus {
     fn from(value: u16) -> Self {
         match value {
             0 => ClientStatus::ClientUnknown,
+            5 => ClientStatus::ClientConnected,
             10 => ClientStatus::ClientReady,
             20 => ClientStatus::ClientPlaying,
             30 => ClientStatus::ClientGoal,
