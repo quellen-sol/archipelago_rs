@@ -14,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
     let game = prompt("What game?")?;
     let slot = prompt("What slot?")?;
     client
-        .connect(&game, &slot, None, Some(7), vec!["AP".to_string()])
+        .connect(&game, &slot, None, Some(7), vec!["AP".to_string()], true)
         .await?;
     println!("Connected to slot!");
 
