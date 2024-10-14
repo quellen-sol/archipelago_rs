@@ -263,6 +263,7 @@ pub struct RoomUpdate {
     pub location_check_points: Option<i32>,
     pub games: Option<Vec<String>>,
     pub datapackage_versions: Option<HashMap<String, i32>>,
+    pub datapackage_checksums: Option<HashMap<String, String>>,
     pub seed_name: Option<String>,
     pub time: Option<f32>,
     // Exclusive to RoomUpdate
