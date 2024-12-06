@@ -94,7 +94,7 @@ pub fn network_version() -> NetworkVersion {
     NetworkVersion {
         major: 0,
         minor: 5,
-        build: 0,
+        build: 1,
         class: "Version".to_string(),
     }
 }
